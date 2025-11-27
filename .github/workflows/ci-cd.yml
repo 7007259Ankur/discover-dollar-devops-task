@@ -29,22 +29,22 @@ jobs:
     # --------------------------
     - name: Build backend image
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/crud-backend:latest ./backend
+        docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/crud-backend:latest" ./backend
 
     - name: Push backend image
       run: |
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/crud-backend:latest
+        docker push "${{ secrets.DOCKERHUB_USERNAME }}/crud-backend:latest"
 
     # --------------------------
     # BUILD FRONTEND IMAGE
     # --------------------------
     - name: Build frontend image
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/crud-frontend:latest ./frontend
+        docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/crud-frontend:latest" ./frontend
 
     - name: Push frontend image
       run: |
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/crud-frontend:latest
+        docker push "${{ secrets.DOCKERHUB_USERNAME }}/crud-frontend:latest"
 
     # --------------------------
     # COPY CONFIG FILES TO EC2
