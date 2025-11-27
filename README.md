@@ -1,6 +1,8 @@
-🚀 Discover Dollar – DevOps Internship Assignment
+<h1 align="center">🚀 Discover Dollar – DevOps Internship Assignment</h1>
 
+<h3 align="center">
 Full-stack MEAN Application Deployment with Docker, Nginx, CI/CD (GitHub Actions), and AWS EC2.
+</h3>
 
 📦 Project Overview
 
@@ -19,6 +21,7 @@ GitHub Actions CI/CD Pipeline
 Docker Hub for image hosting
 
 The application deployment is fully automated:
+
 Whenever code is pushed → GitHub Actions builds containers → pushes images → deploys to EC2 automatically.
 
 🌐 Live Application
