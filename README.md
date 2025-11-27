@@ -12,7 +12,7 @@ This project demonstrates the complete DevOps workflow for containerizing, deplo
 * **Nginx Reverse Proxy** (serves frontend + proxies backend API)
 
 The application is fully deployed and accessible at:
-👉 **[http://YOUR-EC2-PUBLIC-IP/](http://YOUR-EC2-PUBLIC-IP/)**
+👉 **[http://YOUR-EC2-PUBLIC-IP/](http://13.203.213.222/)**
 
 ---
 
@@ -97,8 +97,7 @@ docker-compose down
 
 ### Access Application
 
-Frontend: `http://EC2_PUBLIC_IP/`
-API: `http://EC2_PUBLIC_IP/api/tutorials`
+Frontend: `http://13.203.213.222/`
 
 ---
 
