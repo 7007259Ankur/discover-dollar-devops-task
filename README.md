@@ -3,76 +3,58 @@
 <h3 align="center">
 Full-stack MEAN Application Deployment with Docker, Nginx, CI/CD (GitHub Actions), and AWS EC2.
 </h3>
+🌐 Discover Dollar – DevOps Assignment
+🚀 MEAN App Deployment using Docker, Docker Compose, Nginx, GitHub Actions CI/CD & AWS EC2
+🏆 Project Overview
 
-📦 Project Overview
+This project completes the DevOps Internship Assignment for Discover Dollar, involving:
 
-This project deploys a complete MEAN stack (MongoDB, Express, Angular, Node.js) application using:
+Containerizing a MEAN Stack Application
 
-Docker & Docker Compose
+Deploying it on an AWS EC2 Ubuntu Instance
 
-Nginx Reverse Proxy
+Using Docker, Docker Compose & Nginx Reverse Proxy
 
-MongoDB Database
+Automating deployments with GitHub Actions CI/CD
 
-AWS EC2 (Ubuntu 24.04)
+Storing images on Docker Hub
 
-GitHub Actions CI/CD Pipeline
+Ensuring application runs on port 80 via Nginx
 
-Docker Hub for image hosting
-
-The application deployment is fully automated:
-
-Whenever code is pushed → GitHub Actions builds containers → pushes images → deploys to EC2 automatically.
-
-🌐 Live Application
-
-Component
-
-URL
-
-Frontend
-
-http://13.203.213.222/
-
-Backend API
-
-http://13.203.213.222/api/tutorials
-
-🧰 Tech Stack
-
-Docker
-
-Docker Compose
-
-Nginx (Reverse Proxy)
-
-MongoDB (Dockerized)
-
-Node.js + Express
-
-Angular
-
-AWS EC2
-
-GitHub Actions (CI/CD)
-
-Docker Hub
+💡 The entire pipeline runs automatically on every push to main.
 
 📁 Project Structure
+.
+├── backend/
+├── frontend/
+├── docker-compose.yml
+├── nginx.conf
+└── .github/workflows/build-and-deploy.yml
 
-/backend
-/frontend
+🐳 Dockerized Architecture
+graph TD;
+    A[Frontend - Angular] -->|Docker Image| B[Nginx Reverse Proxy];
+    C[Backend - Node.js/Express] -->|Docker Image| B;
+    D[MongoDB Container] --> C;
+    B -->|Port 80| User[End User];
+
+🔧 Tech Stack
+Component	Technology
+Frontend	Angular + Nginx
+Backend	Node.js + Express
+Database	MongoDB Docker Container
+Reverse Proxy	Nginx
+Containerization	Docker & Docker Compose
+Cloud	AWS EC2 (Ubuntu 24.04 LTS)
+CI/CD	GitHub Actions
+Registry	Docker Hub
+🚀 Deployment Steps
+1️⃣ Clone the repository
+git clone https://github.com/<your-username>/<repo>.git
+cd repo
+
+2️⃣ Docker Compose Setup on EC2
 docker-compose.yml
-nginx.conf
-.github/workflows/build-and-deploy.yml
-
-
-⚙️ Configuration Files
-
-🐳 Docker Compose (docker-compose.yml)
-
-version: '3.8'
-
 services:
   mongo:
     image: mongo:6
@@ -88,7 +70,7 @@ services:
     environment:
       MONGO_URL: "mongodb://mongo:27017/mydb"
     expose:
-      - "3000"
+      - "8080"
 
   frontend:
     image: ${DOCKER_USERNAME}/crud-frontend:latest
@@ -112,14 +94,15 @@ services:
 volumes:
   mongo-data:
 
+3️⃣ Nginx Reverse Proxy
 
-🧭 Nginx Configuration (nginx.conf)
+nginx.conf
 
 server {
     listen 80;
 
     location /api/ {
-        proxy_pass http://backend:3000/;
+        proxy_pass http://backend:8080/;
     }
 
     location / {
@@ -127,8 +110,9 @@ server {
     }
 }
 
+4️⃣ GitHub Actions CI/CD Workflow
 
-🤖 GitHub Actions Workflow (.github/workflows/build-and-deploy.yml)
+.github/workflows/build-and-deploy.yml
 
 name: build-and-deploy
 
@@ -151,18 +135,18 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Build backend image
-      run: docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/crud-backend:latest" ./backend
-
+      run: |
+        docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/crud-backend:latest" ./backend
     - name: Push backend image
       run: docker push "${{ secrets.DOCKERHUB_USERNAME }}/crud-backend:latest"
 
     - name: Build frontend image
-      run: docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/crud-frontend:latest" ./frontend
-
+      run: |
+        docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/crud-frontend:latest" ./frontend
     - name: Push frontend image
       run: docker push "${{ secrets.DOCKERHUB_USERNAME }}/crud-frontend:latest"
 
-    - name: Copy docker-compose + nginx.conf to EC2
+    - name: Copy compose files to EC2
       uses: appleboy/scp-action@v0.1.4
       with:
         host: ${{ secrets.EC2_HOST }}
@@ -171,7 +155,7 @@ jobs:
         source: "docker-compose.yml,nginx.conf"
         target: "/home/ubuntu/app"
 
-    - name: SSH into EC2 & restart services
+    - name: SSH into EC2 and deploy
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.EC2_HOST }}
@@ -185,33 +169,58 @@ jobs:
           sudo docker-compose down
           sudo docker-compose up -d
 
+🧪 Testing
+✔ Frontend
 
-📸 Screenshots
+Open in browser:
 
-1. GitHub Repository
+http://<EC2-PUBLIC-IP>/
 
-All files: backend, frontend, docker-compose.yml, nginx.conf, workflows
+✔ Backend API
+curl http://<EC2-PUBLIC-IP>/api/tutorials
 
-2. Docker Images Pushed to Docker Hub
 
-Showing crud-backend and crud-frontend tags
+(because Nginx forwards /api → backend)
 
-3. GitHub Actions — SUCCESS RUN
+📸 Screenshots to Include in Submission
 
-Full pipeline success execution
+You MUST include these:
 
-4. EC2 Instance Running Containers
+🟩 1. Docker Images built locally
 
-Output of docker ps showing mongo, backend, frontend, and nginx
+Screenshot of docker images
 
-5. Working Application
+🟩 2. Docker Hub Repository
 
-Browser screenshot of http://13.203.213.222/
+Your crud-frontend:latest
 
-6. Nginx Reverse Proxy Config Check
+crud-backend:latest
 
-Output of docker exec -it nginx cat /etc/nginx/conf.d/default.conf
+🟩 3. Running Containers on EC2
 
-7. API Test
+Run:
 
-Output of curl http://localhost:3000/api/tutorials
+docker ps
+
+
+Screenshot required.
+
+🟩 4. Application Working in Browser
+
+Frontend UI
+
+Create / Update tutorial
+
+🟩 5. GitHub Actions Pipeline
+
+Successful run (green check mark)
+
+Steps expanded (build, push, deploy)
+
+🟩 6. Nginx reverse proxy file
+
+Screenshot of nginx.conf
+
+🟩 7. Folder structure on EC2
+
+ls /home/ubuntu/app
