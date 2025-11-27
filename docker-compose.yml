@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   mongo:
     image: mongo:6
@@ -6,8 +8,9 @@ services:
       - mongo-data:/data/db
 
   backend:
-    build: ./backend
-    image: 7007259ankur/crud-backend:latest
+    # REMOVED "build: ./backend" because code does not exist on server
+    # CHANGED to use variable to match GitHub Secret exactly
+    image: ${DOCKER_USERNAME}/crud-backend:latest
     restart: unless-stopped
     depends_on:
       - mongo
@@ -17,8 +20,9 @@ services:
       - "3000"
 
   frontend:
-    build: ./frontend
-    image: 7007259ankur/crud-frontend:latest
+    # REMOVED "build: ./frontend"
+    # CHANGED to use variable
+    image: ${DOCKER_USERNAME}/crud-frontend:latest
     restart: unless-stopped
     depends_on:
       - backend
@@ -34,7 +38,8 @@ services:
       - frontend
       - backend
     volumes:
-      - /c/Users/ankur/Downloads/crud-dd-task-mean-app/crud-dd-task-mean-app/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # CRITICAL FIX: Changed Windows path to relative path for Linux
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
 
 volumes:
   mongo-data:
