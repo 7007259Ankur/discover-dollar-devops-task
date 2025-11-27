@@ -211,16 +211,5 @@ Submit GitHub Repo URL with:
 
 ---
 
-# 🎯 Conclusion
 
-This assignment demonstrates:
 
-* Containerization
-* Cloud deployment
-* Reverse proxying
-* Automation using CI/CD
-* GitOps-style delivery
-
-Your setup is now **production-ready** and fully automated 🚀
-
-If you want, I can also create **badges**, ** diagrams**, or a more stylish README.
