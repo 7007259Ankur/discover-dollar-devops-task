@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI/CD Pipeline for CRUD App
 
 on:
   push:
@@ -9,40 +9,64 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # --------------------
+    # Checkout repository
+    # --------------------
     - name: Checkout code
       uses: actions/checkout@v3
 
+    # --------------------
+    # Login to Docker Hub
+    # --------------------
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    # ---------------- BACKEND BUILD ----------------
+    # --------------------
+    # Build Backend Image
+    # --------------------
     - name: Build backend image
-      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/crud-backend:latest ./backend
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/crud-backend:latest ./backend
 
+    # --------------------
+    # Push Backend Image
+    # --------------------
     - name: Push backend image
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/crud-backend:latest
+      run: |
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/crud-backend:latest
 
-    # ---------------- FRONTEND BUILD ----------------
+    # --------------------
+    # Build Frontend Image
+    # --------------------
     - name: Build frontend image
-      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/crud-frontend:latest ./frontend
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/crud-frontend:latest ./frontend
 
+    # --------------------
+    # Push Frontend Image
+    # --------------------
     - name: Push frontend image
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/crud-frontend:latest
+      run: |
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/crud-frontend:latest
 
-    # ---------------- COPY FILES ----------------
-    - name: Copy docker-compose + nginx.conf to EC2
+    # --------------------
+    # Copy docker-compose and nginx.conf to EC2
+    # --------------------
+    - name: Copy config files to EC2
       uses: appleboy/scp-action@v0.1.4
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ubuntu
         key: ${{ secrets.EC2_SSH_KEY }}
-        source: "docker-compose.yml,nginx.conf"
+        source: "docker-compose.yml, nginx.conf"
         target: "/home/ubuntu/app"
 
-    # ---------------- DEPLOY ON EC2 ----------------
+    # --------------------
+    # Connect to EC2 and restart Docker services
+    # --------------------
     - name: SSH into EC2 & restart services
       uses: appleboy/ssh-action@v1.0.3
       with:
@@ -52,5 +76,4 @@ jobs:
         script: |
           cd /home/ubuntu/app
           docker-compose pull
-          docker-compose down
           docker-compose up -d
