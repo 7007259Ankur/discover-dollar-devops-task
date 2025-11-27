@@ -135,6 +135,8 @@ Secrets used:
 You MUST include these in your repository README or submission form:
 
 ### 🖼 1. Docker Images on Docker Hub
+![UI Screenshot](image1.png)
+
 
 * Backend image
 * Frontend image
@@ -142,6 +144,7 @@ You MUST include these in your repository README or submission form:
 ### 🖼 2. Docker Compose Running on EC2
 
 `docker ps` output showing 4 containers running:
+![UI Screenshot](image2.png)
 
 * mongo
 * backend
@@ -152,9 +155,14 @@ You MUST include these in your repository README or submission form:
 
 * Screenshot of Angular CRUD dashboard
 
+* ![UI Screenshot](image3.png)
+
 ### 🖼 4. API Response Test
 
+![UI Screenshot](image4.png)
+
 Run:
+
 
 ```bash
 curl http://localhost:3000/api/tutorials
@@ -164,6 +172,8 @@ curl http://localhost:3000/api/tutorials
 
 * Successful workflow run
 * Green check ✔
+
+![UI Screenshot](image5.png)
 
 ### 🖼 6. Nginx reverse proxy file
 
